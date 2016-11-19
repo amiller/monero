@@ -55,7 +55,23 @@ set(blockchain_export_private_headers
   )
 
 monero_private_headers(blockchain_export
-	  ${blockchain_export_private_headers})
+  ${blockchain_export_private_headers})
+
+set(analysis_test1_sources
+  analysis_test1.cpp
+  bootstrap_file.cpp
+  blocksdat_file.cpp
+  )
+
+set(analysis_test1_private_headers
+  bootstrap_file.h
+  blocksdat_file.h
+  bootstrap_serialization.h
+  )
+
+monero_private_headers(analysis_test1
+	  ${analysis_test1_private_headers})
+
 
 
 set(cn_deserialize_sources
@@ -126,3 +142,23 @@ set_property(TARGET cn_deserialize
 	PROPERTY
 	OUTPUT_NAME "cn_deserialize")
 
+monero_add_executable(analysis_test1
+  ${analysis_test1_sources}
+  ${analysis_test1_private_headers})
+
+target_link_libraries(analysis_test1
+  PRIVATE
+    cryptonote_core
+    blockchain_db
+    p2p
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+    ${Boost_THREAD_LIBRARY}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${EXTRA_LIBRARIES})
+
+add_dependencies(analysis_test1
+	version)
+set_property(TARGET analysis_test1
+	PROPERTY
+	OUTPUT_NAME "analysis_test1")

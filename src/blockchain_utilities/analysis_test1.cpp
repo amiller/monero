@@ -71,7 +71,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
       {
 	crypto::hash tx_hash = get_transaction_hash(tx);
 
-	LOG_PRINT_L0("\ntx hash          : " << tx_hash << ", block height " << cur_height);
+	LOG_PRINT_L0("\ntx hash          : " << tx_hash << ", block height " << cur_height << " " << tx.vin.size());
 
 	vector<string> mixin_timescales_str;
 
@@ -84,7 +84,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 
 	    if (tx_in.type() == typeid(cryptonote::txin_gen))
 	      {
-		LOG_PRINT_L0(" - coinbase tx: no inputs here.\n");
+		//LOG_PRINT_L0(" - coinbase tx: no inputs here.\n");
 		continue;
 	      }
 
@@ -93,7 +93,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 	      = boost::get<cryptonote::txin_to_key>(tx_in);
 
 
-	    LOG_PRINT_L0("Input's xmr:" << tx_in_to_key.amount);
+	    //LOG_PRINT_L0("Input's xmr:" << in_i << " " << tx_in_to_key.amount);
 
 	    // get absolute offsets of mixins
 	    std::vector<uint64_t> absolute_offsets
@@ -132,7 +132,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 		  return false;
 		}
 
-		LOG_PRINT_L0("mixin no: " << (count + 1));
+		//LOG_PRINT_L0("mixin no: " << (count + 1));
 
 		++count;
 	      } // for (const uint64_t& i: absolute_offsets)

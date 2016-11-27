@@ -101,6 +101,8 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 	    return false;
 	}
 
+	LOG_PRINT_L0("block height: " << cur_height << " " << blk.timestamp);
+
 	for (const cryptonote::transaction& tx : txs) {
 	    crypto::hash tx_hash = get_transaction_hash(tx);
 
@@ -111,8 +113,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 	    sss.erase(sss.end() - 1);
 	    sss.erase(sss.begin());
 		
-	    LOG_PRINT_L0("\ntx hash: " << tx_hash << ", block height " << cur_height);
-	    LOG_PRINT_L0("block timestamp: " << blk.timestamp);
+	    LOG_PRINT_L1("\ntx hash: " << tx_hash << ", block height " << cur_height);
 		
 	    vector<string> mixin_timescales_str;
 		
@@ -123,7 +124,7 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 		cryptonote::txin_v tx_in = tx.vin[in_i];
 		    
 		if (tx_in.type() == typeid(cryptonote::txin_gen)) {
-		    //LOG_PRINT_L0(" - coinbase tx: no inputs here.\n");
+		    LOG_PRINT_L1(" - coinbase tx: no inputs here.\n");
 		    continue;
 		}
 		    
@@ -132,18 +133,18 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 		    = boost::get<cryptonote::txin_to_key>(tx_in);
 		    
 
-		LOG_PRINT_L0("Input's xmr:" << tx_in_to_key.amount);
+		LOG_PRINT_L1("Input's xmr:" << tx_in_to_key.amount);
 
 		size_t count = 0;
 
 		uint64_t avail = availableMixinsMap[tx_in_to_key.amount];
-		LOG_PRINT_L0("Available mixins:" << avail);
+		LOG_PRINT_L1("Available mixins:" << avail);
 		    
 		// lookup the block offset
 		for (const uint64_t& i : tx_in_to_key.key_offsets) {
 
-		    LOG_PRINT_L0("mixin no: " << (count + 1));
-		    LOG_PRINT_L0("offset:" << i << " (" << float(i) / avail << ")");
+		    LOG_PRINT_L1("mixin no: " << (count + 1));
+		    LOG_PRINT_L1("offset:" << i << " (" << float(i) / avail << ")");
 
 		    string sql_second =
 			"insert into second (tx_hash, input_no, mixin_no, block_height, amount, tx_hash_timestamp, available_mixins, relative_offset) values(\""

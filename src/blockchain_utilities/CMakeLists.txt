@@ -133,7 +133,7 @@ monero_add_executable(cn_deserialize
 target_link_libraries(cn_deserialize
   LINK_PRIVATE
     cryptonote_core
-	p2p
+    p2p
     ${CMAKE_THREAD_LIBS_INIT})
 
 add_dependencies(cn_deserialize
@@ -151,6 +151,7 @@ target_link_libraries(analysis_test1
     cryptonote_core
     blockchain_db
     p2p
+    sqlite3
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_THREAD_LIBRARY}

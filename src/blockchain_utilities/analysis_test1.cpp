@@ -139,15 +139,17 @@ bool parse_blockchain_pass1(Blockchain* blockchain_storage, tx_memory_pool* _tx_
 
 		uint64_t avail = availableMixinsMap[tx_in_to_key.amount];
 		LOG_PRINT_L1("Available mixins:" << avail);
+
+		std::vector<uint64_t> absolute_offsets = relative_output_offsets_to_absolute(tx_in_to_key.key_offsets);
 		    
 		// lookup the block offset
-		for (const uint64_t& i : tx_in_to_key.key_offsets) {
+		for (const uint64_t& i : absolute_offsets) {
 
 		    LOG_PRINT_L1("mixin no: " << (count + 1));
 		    LOG_PRINT_L1("offset:" << i << " (" << float(i) / avail << ")");
 
 		    string sql_second =
-			"insert into second (tx_hash, input_no, mixin_no, block_height, amount, tx_hash_timestamp, available_mixins, relative_offset) values(\""
+			"insert into second (tx_hash, input_no, mixin_no, block_height, amount, tx_hash_timestamp, relative_offset, available_mixins) values(\""
 			+ sss + "\", \""
 			+ to_string(in_i) + "\", \""
 			+ to_string(count) + "\", \""
